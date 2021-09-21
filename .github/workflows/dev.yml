@@ -1,9 +1,10 @@
-name: Deploy RAWGraphs dev
+name: Deploy RAWGraphs prod
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for tagged versions
 on:
   push:
-    branches: [master]
+    branches:
+      - master
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -46,17 +47,8 @@ jobs:
           CI: false
           REACT_APP_VERSION: ${{ steps.vars.outputs.sha_short }}
 
-      - name: List output files
-        run: find build/ -print
-
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          # Deployment destination server & path. Formatted as protocol://domain.com:port/full/destination/path/
-          ftp-server: ftp://dev.rawgraphs.io/dev.rawgraphs.io/
-          # FTP account username
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          # FTP account password
-          ftp-password: ${{ secrets.FTP_PASSWORD }}
-          # The local folder to copy, defaults to root project folder
-          local-dir: build
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
