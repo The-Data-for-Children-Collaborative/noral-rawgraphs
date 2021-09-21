@@ -3,8 +3,8 @@ name: Deploy RAWGraphs prod
 # events but only for tagged versions
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - master
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -52,4 +52,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
-          cname: app.rawgraphs.io
